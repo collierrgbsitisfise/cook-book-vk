@@ -1,3 +1,12 @@
-const str: string = 'Hello app';
+import VkService from './services/vk.service';
 
-console.log(str);
+
+const vk = new VkService('LOGIN', 'PWD');
+
+vk.autheticate().then(res => {
+    console.log('succes auth');
+    console.log(vk.getAuthtoken());
+}).catch(err => {
+    console.log('Failed auth');
+    console.log(err);
+});
