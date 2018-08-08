@@ -1,14 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const vk_service_1 = require("./services/vk.service");
 const parse_gif_povar_sevice_1 = require("./services/parse.gif-povar.sevice");
-// const vk = new VkService('LOGIN', 'PWD');
-// vk.autheticate().then(res => {
-//     console.log('succes auth');
-//     console.log(vk.getAuthtoken());
-// }).catch(err => {
-//     console.log('Failed auth');
-//     console.log(err);
-// });
+const vk = new vk_service_1.default('LOGIN', 'PWD');
+vk.autheticate().then(res => {
+    console.log('succes auth');
+    console.log(vk.getAuthtoken());
+}).catch(err => {
+    console.log('Failed auth');
+    console.log(err);
+});
 const gifParser = new parse_gif_povar_sevice_1.default();
 gifParser.setProxyServer('http://localhost:5555');
 gifParser.getPageHtml().then((res) => {
