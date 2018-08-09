@@ -9,10 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const rp = require("request-promise");
+const cheerio = require("cheerio");
 class ParseGifPovarService {
     constructor() {
-        this.baseParseUrl = 'https://gif-povar.ru/';
-        this.cookTypes = ['vegetarianskie', 'vypechka', 'detskie-blyuda', 'krupy', 'kurica', 'vegetarianskij-salat-s-nutom'];
+        this.baseParseUrl = "https://gif-povar.ru/";
+        this.cookTypes = [
+            "vegetarianskie",
+            "vypechka",
+            "detskie-blyuda",
+            "krupy",
+            "kurica",
+            "vegetarianskij-salat-s-nutom"
+        ];
     }
     getallTypes() {
         return this.cookTypes;
@@ -23,18 +31,50 @@ class ParseGifPovarService {
     setProxyServer(proxyServer) {
         this.proxyUrl = proxyServer;
     }
-    setPageHtml() {
+    setPageHtml(uri = this.getBaseUrl()) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const result = yield rp.get({
-                    url: `${this.proxyUrl}/?uri=${this.getBaseUrl()}`
+                    url: `${this.proxyUrl}/?uri=${uri}`
                 });
-                this.htmlContent = result;
+                //@TODO  WTF - HOW PROXY NAHUI WORKS ???????
+                this.htmlContent = JSON.parse(result).data.data;
             }
             catch (err) {
                 throw new Error(err);
             }
         });
+    }
+    getMainCookOfDay() {
+        let result = [];
+        const $ = cheerio.load(this.htmlContent);
+        console.log($("#post-items").length);
+        $("#post-items")
+            .children()
+            .each(function (i, arcticle) {
+            const postThumbnail = $(arcticle)
+                .children()
+                .eq(1);
+            const videoWrapper = $(postThumbnail)
+                .children()
+                .eq(1);
+            const videoTag = $(videoWrapper)
+                .children()
+                .eq(0);
+            const sourceVideo = $(videoTag)
+                .children()
+                .eq(0)
+                .attr("src");
+            const sourceImg = $(videoTag)
+                .children()
+                .eq(1)
+                .attr("src");
+            result.push({
+                sourceVideo,
+                sourceImg
+            });
+        });
+        return result;
     }
     getPageHtml() {
         return this.htmlContent;

@@ -21,7 +21,9 @@ const vk = new vk_service_1.default('LOGIN', 'PWD');
 (() => __awaiter(this, void 0, void 0, function* () {
     const gifParser = new parse_gif_povar_service_1.default();
     gifParser.setProxyServer('http://localhost:5555');
-    let res = yield gifParser.getPageHtml();
-    console.log(res);
+    yield gifParser.setPageHtml();
+    // let res = gifParser.getPageHtml();
+    let mainCooks = gifParser.getMainCookOfDay();
+    console.log(mainCooks);
 }))();
 //# sourceMappingURL=app.js.map

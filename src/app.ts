@@ -14,6 +14,8 @@ const vk = new VkService('LOGIN', 'PWD');
 (async (): Promise<any> => {
     const gifParser = new ParseGifPovarService();
     gifParser.setProxyServer('http://localhost:5555');
-    let res = await gifParser.getPageHtml();
-    console.log(res);
+    await gifParser.setPageHtml();
+    // let res = gifParser.getPageHtml();
+    let mainCooks = gifParser.getMainCookOfDay();
+    console.log(mainCooks);
 })();
