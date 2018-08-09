@@ -4,6 +4,7 @@ class ParseGifPovarService {
     
     private baseParseUrl: string = 'https://gif-povar.ru/';
     private cookTypes: string[] = ['vegetarianskie', 'vypechka', 'detskie-blyuda', 'krupy', 'kurica', 'vegetarianskij-salat-s-nutom'];
+    private htmlContent: any; 
     
     public proxyUrl: string;
 
@@ -21,23 +22,21 @@ class ParseGifPovarService {
         this.proxyUrl = proxyServer;
     }
     
-    public async getPageHtml(): Promise<any> {
+    public async setPageHtml(): Promise<any> {
         try {
             const result = await rp.get({
                 url: `${this.proxyUrl}/?uri=${this.getBaseUrl()}`
             });
-
-            return {
-                data: result,
-                error: null
-            }
+            
+            this.htmlContent = result;
         } catch (err) {
-            return {
-                data: null,
-                error: err
-            }
+              throw new Error(err);
         }
     } 
+    
+    public getPageHtml(): string {
+        return this.htmlContent;
+    }
 }
 
 export default ParseGifPovarService;
