@@ -2,7 +2,7 @@ const vkapi = new(require('node-vkapi'))();
 
 class VkService {
     
-    private authToken: string;
+    private vkApi: any;
     private userName: string;
     private password: string;
 
@@ -23,12 +23,24 @@ class VkService {
             accessToken: data.access_token
         });
 
-        this.authToken = vkApi;
+        this.vkApi = vkApi;
     }
 
-    public getAuthtoken(): any {
-        return this.authToken;
+
+    public getvkApi(): any {
+        return this.vkApi;
     }
+
+    public async postVideoGropu(groupId: string): Promise<any> {
+        let data = await this.vkApi.call('messages.getConversations', {
+            owner_id: groupId,
+            message: 'first one',
+            attachments: {
+                type: 'video'
+            }
+        });
+        return data;
+    } 
 
 }
 

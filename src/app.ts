@@ -1,11 +1,11 @@
 import VkService from './services/vk.service';
 import ParseGifPovarService from './services/parse.gif-povar.service'
 
-const vk = new VkService('LOGIN', 'PWD');
+const vk = new VkService('+37360958742', 'pythonjavajavascript');
 
-// vk.autheticate().then(res => {
-//     console.log('succes auth');
-//     console.log(vk.getAuthtoken());
+// vk.autheticate().then(async (res) => {
+//     let data = await vk.postVideoGropu('169958059');
+//     console.log(data);
 // }).catch(err => {
 //     console.log('Failed auth');
 //     console.log(err);
@@ -15,7 +15,6 @@ const vk = new VkService('LOGIN', 'PWD');
     const gifParser = new ParseGifPovarService();
     gifParser.setProxyServer('http://localhost:5555');
     await gifParser.setPageHtml();
-    // let res = gifParser.getPageHtml();
     let mainCooks = gifParser.getMainCookOfDay();
     console.log(mainCooks);
 })();

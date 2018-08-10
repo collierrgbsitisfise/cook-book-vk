@@ -10,10 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const vk_service_1 = require("./services/vk.service");
 const parse_gif_povar_service_1 = require("./services/parse.gif-povar.service");
-const vk = new vk_service_1.default('LOGIN', 'PWD');
-// vk.autheticate().then(res => {
-//     console.log('succes auth');
-//     console.log(vk.getAuthtoken());
+const vk = new vk_service_1.default('+37360958742', 'pythonjavajavascript');
+// vk.autheticate().then(async (res) => {
+//     let data = await vk.postVideoGropu('169958059');
+//     console.log(data);
 // }).catch(err => {
 //     console.log('Failed auth');
 //     console.log(err);
@@ -22,7 +22,6 @@ const vk = new vk_service_1.default('LOGIN', 'PWD');
     const gifParser = new parse_gif_povar_service_1.default();
     gifParser.setProxyServer('http://localhost:5555');
     yield gifParser.setPageHtml();
-    // let res = gifParser.getPageHtml();
     let mainCooks = gifParser.getMainCookOfDay();
     console.log(mainCooks);
 }))();

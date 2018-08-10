@@ -25,11 +25,23 @@ class VkService {
             const vkApi = new (require('node-vkapi'))({
                 accessToken: data.access_token
             });
-            this.authToken = vkApi;
+            this.vkApi = vkApi;
         });
     }
-    getAuthtoken() {
-        return this.authToken;
+    getvkApi() {
+        return this.vkApi;
+    }
+    postVideoGropu(groupId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let data = yield this.vkApi.call('messages.getConversations', {
+                owner_id: groupId,
+                message: 'first one',
+                attachments: {
+                    type: 'video'
+                }
+            });
+            return data;
+        });
     }
 }
 exports.default = VkService;
