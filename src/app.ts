@@ -2,7 +2,7 @@ import VkService from './services/vk.service';
 import ParseGifPovarService from './services/parse.gif-povar.service'
 import VideoToGif from './services/videoToGif.service';
 
-const vk = new VkService('+37360958742', 'pythonjavajavascript');
+const vk = new VkService('', '');
 
 // vk.autheticate().then(async (res) => {
 //     let data = await vk.postVideoGropu('169958059');
