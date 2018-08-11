@@ -18,6 +18,7 @@
     "@types/request": "^2.47.1",
     "@types/request-promise": "^4.1.42",
     "cheerio": "^1.0.0-rc.2",
+    "gify": "^0.2.0",
     "node-vkapi": "^3.0.7",
     "request": "^2.87.0",
     "request-promise": "^4.2.2"
