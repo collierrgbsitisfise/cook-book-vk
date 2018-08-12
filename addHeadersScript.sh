@@ -1,0 +1,1 @@
+ffmpeg -i /home/vadik/Documents/cook-book-vk/tmp_video/stejk.mp4 -c:v libx265 -c:a copy -flags +global_header /home/vadik/Documents/cook-book-vk/tmp_video_norm/stejk.mp4

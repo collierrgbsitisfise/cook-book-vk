@@ -3,6 +3,7 @@
 #tmp files
 /tmp_gif
 /tmp_video
+/tmp_video_norm
 
 #Compliled ts
 /dist

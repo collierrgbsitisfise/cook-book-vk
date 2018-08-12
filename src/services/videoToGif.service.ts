@@ -1,9 +1,6 @@
-import * as gify from "gify";
 import * as path from "path";
 import * as fs from "fs";
-import * as hjs from "handbrake-js";
 import * as exec from "child_process";
-import * as conv from 'video-converter';
 
 class VideoToGif {
   constructor() {}
@@ -11,54 +8,55 @@ class VideoToGif {
   public convertMp4toGif(videoSrc: string, pathToSave: string) {
     var input = path.join(__dirname, `../../tmp_video/${videoSrc}`);
     var output = path.join(__dirname, `../../tmp_gif/${pathToSave}`);
-    conv.setFfmpegPath("/usr/bin/ffmpeg", function(err:any) {
-        if (err) {
-            console.log('ERROR');
-            console.log(err);
-        };
-    
-        conv.convert(input, output, function(err:any) {
-            console.log('ERRORS');
-            console.log(err);
-            if (err) {
-                console.log('conver error');
-            };
-            console.log("done");
-        });
-        console.log('no errors');
+    const cmd = "sh";
+    return new Promise((res, _) => {
+      var args = [path.join(__dirname, `../../test.sh`)];
+      let proc = exec.spawn(cmd, args);
+      proc.stdout.on("data", function(data) {
+        console.log("DATA");
+        console.log(data.toString("utf8"));
+      });
+
+      proc.stderr.on("data", function(data) {
+        console.log("ERROR");
+        console.log(data.toString("utf8"));
+      });
+
+      proc.on("close", function() {
+        console.log("finished");
+        res("ok");
+      });
     });
-    // console.log(input);
-    // console.log(output);
-    // console.log("-------------------------------------");
-    // const cmd = "/usr/bin/ffmpeg";
-    // return new Promise((res, _) => {
-    //   var args = ["-y", "-i", `${input}`, `${output}`];
-    //   let proc = exec.spawn(cmd, args);
-    //   console.log("TGSI COMMAND");
-    //   console.log(`/usr/bin/ffmpeg -i ${input} ${output}`);
-    //   exec.exec(
-    //     `/usr/bin/ffmpeg -i ${input} ${output}`,
-    //     (error, stdout, stderr) => {
-    //       console.log("lalaka");
-    //       console.log(stderr);
-    //       //   res("ok");
-    //     }
-    //   );
-    //   proc.stdout.on("data", function(data) {
-    //     console.log("DATA");
-    //     console.log(data.toString("utf8"));
-    //   });
+  }
 
-    //   proc.stderr.on("data", function(data) {
-    //     console.log("ERROR");
-    //     console.log(data.toString("utf8"));
-    //   });
+  public addAditionalHeadersToMp4(videoSrc: string) {
+    console.log("I am in additions headers");
+    var input = path.join(__dirname, `../../tmp_video/${videoSrc}`);
+    var output = path.join(__dirname, `../../tmp_video_norm/${videoSrc}`);
+    var cmd = "sh";
+    return new Promise(res => {
+      fs.writeFileSync(
+        path.join(__dirname, `../../addHeadersScript.sh`),
+        `ffmpeg -i ${input} -c:v libx265 -c:a copy -flags +global_header ${output}`
+      );
+      res("ok");
+      var args = [path.join(__dirname, `../../addHeadersScript.sh`)];
+      let proc = exec.spawn(cmd, args);
+      proc.stdout.on("data", function(data) {
+        console.log("DATA");
+        console.log(data.toString("utf8"));
+      });
 
-    //   proc.on("close", function() {
-    //     console.log("finished");
-    //     res("ok");
-    //   });
-    // });
+      proc.stderr.on("data", function(data) {
+        console.log("ERROR");
+        console.log(data.toString("utf8"));
+      });
+
+      proc.on("close", function() {
+        console.log("finished");
+        res("ok");
+      });
+    });
   }
 }
 
