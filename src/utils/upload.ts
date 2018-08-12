@@ -24,4 +24,15 @@ const DownloadByLink = async (inputArr: string[], pathToSave: string) => {
   });
 };
 
-export default DownloadByLink;
+const getAllFilesFromDir = (path: string): Promise<any> => {
+  return new Promise((res, rej) => {
+    fs.readdir(path, function(err, files) {
+      res(files);
+    });
+  });
+};
+
+export default {
+  getAllFilesFromDir,
+  DownloadByLink
+}
