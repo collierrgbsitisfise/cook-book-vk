@@ -19,7 +19,7 @@ const main = async () => {
   console.log('pwd : ', process.env.VK_PWD);
 
   //login VK
-  const vk = new VkService('+37360958742', 'pythonjavajavascript');
+  const vk = new VkService('', '');
   await vk.autheticate();
 
   //remove all folders[tmp__*]
