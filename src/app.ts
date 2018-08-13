@@ -8,15 +8,26 @@ import VideoToGif from "./services/videoToGif.service";
 import upload from "./utils/upload";
 
 const main = async () => {
+
+  //utils
+  const {
+    DownloadByLink,
+    getAllFilesFromDir
+  } = upload;
+  
+  console.log('login : ', process.env.VK_LOGIN);
+  console.log('pwd : ', process.env.VK_PWD);
+
   //login VK
-  const vk = new VkService(process.env.VK_LOGIN, process.env.VK_PWD);
+  const vk = new VkService('+37360958742', 'pythonjavajavascript');
   await vk.autheticate();
 
-  //remove all folders[tmp__]
+  //remove all folders[tmp__*]
   fsx.removeSync(path.join(__dirname, `../tmp_video`));
   fsx.removeSync(path.join(__dirname, `../tmp_gif`));
   fsx.removeSync(path.join(__dirname, `../tmp_video_norm`));
-
+  
+  //create all folders[tmp__*]
   fsx.mkdirSync(path.join(__dirname, `../tmp_video`));
   fsx.mkdirSync(path.join(__dirname, `../tmp_gif`));
   fsx.mkdirSync(path.join(__dirname, `../tmp_video_norm`));
@@ -26,20 +37,22 @@ const main = async () => {
   gifParser.setProxyServer("http://localhost:5555");
   await gifParser.setPageHtml();
   let mainCooks = gifParser.getMainCookOfDay();
-
+  
+  console.log(mainCooks.map(({ sourceVideo }) => sourceVideo));
   //Download all videos(main cooks)
-  upload.DownloadByLink(
+  DownloadByLink(
     mainCooks.map(({ sourceVideo }) => sourceVideo),
     path.join(__dirname, `../tmp_video/`)
   );
 
   //Get all videos from tmp_video
-  let filesToConvert = await upload.getAllFilesFromDir(
+  let filesToConvert = await getAllFilesFromDir(
     path.join(__dirname, `../tmp_video/`)
   );
 
   console.log('files in tmp video');
-  console.log(filesToConvert);
+  console.log(path.join(__dirname, `../tmp_video/${filesToConvert[0]}`));
+  await vk.postVideoGropu('169958059', path.join(__dirname, `../tmp_vidseo/${filesToConvert[0]}`));
 };
 
 main();

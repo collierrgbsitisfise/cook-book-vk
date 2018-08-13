@@ -47,7 +47,6 @@ class ParseGifPovarService {
     let result: any[] = [];
 
     const $ = cheerio.load(this.htmlContent);
-    console.log($("#post-items").length);
     $("#post-items")
       .children()
       .each(function(i, arcticle) {
