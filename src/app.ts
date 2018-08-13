@@ -15,9 +15,6 @@ const main = async () => {
     getAllFilesFromDir
   } = upload;
   
-  console.log('login : ', process.env.VK_LOGIN);
-  console.log('pwd : ', process.env.VK_PWD);
-
   //login VK
   const vk = new VkService('', '');
   await vk.autheticate();
