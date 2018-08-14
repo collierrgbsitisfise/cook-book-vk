@@ -15,11 +15,12 @@ const main = async () => {
     getAllFilesFromDir
   } = upload;
   
-  console.log('login : ', process.env.VK_LOGIN);
-  console.log('pwd : ', process.env.VK_PWD);
-
   //login VK
+<<<<<<< HEAD
   const vk = new VkService('+', '');
+=======
+  const vk = new VkService('', '');
+>>>>>>> 0a0703d596773668dec6e62acb04164701450c9b
   await vk.autheticate();
 
   //remove all folders[tmp__*]
