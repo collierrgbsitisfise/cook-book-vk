@@ -16,11 +16,7 @@ const main = async () => {
   } = upload;
   
   //login VK
-<<<<<<< HEAD
-  const vk = new VkService('+', '');
-=======
   const vk = new VkService('', '');
->>>>>>> 0a0703d596773668dec6e62acb04164701450c9b
   await vk.autheticate();
 
   //remove all folders[tmp__*]
@@ -39,7 +35,6 @@ const main = async () => {
   await gifParser.setPageHtml();
   let mainCooks = gifParser.getMainCookOfDay();
   
-  console.log(mainCooks.map(({ sourceVideo }) => sourceVideo));
   //Download all videos(main cooks)
   DownloadByLink(
     mainCooks.map(({ sourceVideo }) => sourceVideo),
@@ -51,8 +46,6 @@ const main = async () => {
     path.join(__dirname, `../tmp_video/`)
   );
 
-  console.log('files in tmp video');
-  console.log(path.join(__dirname, `../tmp_video/${filesToConvert[0]}`));
   await vk.postVideoGropu('169958059', path.join(__dirname, `../tmp_vidseo/${filesToConvert[0]}`));
 };
 
