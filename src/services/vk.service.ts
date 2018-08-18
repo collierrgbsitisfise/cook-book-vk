@@ -37,17 +37,20 @@ class VkService {
 
   public async postVideoGropu(
     groupId: string,
-    pathToVideo: string,
+    fileName: string,
     videoName: string = `test${+(new Date())}`
-  ): Promise<void> {
+  ): Promise<boolean> {
     
     let saveData = await this.vkApi.call("video.save", {
       name: videoName,
       group_id: groupId
     });
     
+    console.log('video was saved');
+    console.log(saveData);
+    
     //streaming video
-    let file = fs.createReadStream(pathToVideo);
+    let file = fs.createReadStream(path.join(__dirname, `../../tmp_video/${fileName}`));
     
     let uploadData = await rp.post({
       url: saveData.upload_url,
@@ -56,14 +59,30 @@ class VkService {
       }
     });
     
+    console.log('File was uploaded');
+    console.log(uploadData);
+
     uploadData = JSON.parse(uploadData);
-    
-    await this.vkApi.call("video.add", {
-      target_id: -Number(groupId),
-      video_id: uploadData.video_id,
-      owner_id: -Number(groupId)
+     
+    try {
+      await this.vkApi.call("video.add", {
+        target_id: -Number(groupId),
+        video_id: uploadData.video_id,
+        owner_id: -Number(groupId)
+      });
+      console.log('video was added');
+    } catch (err) {
+      console.log('video already added');
+    }
+   
+    await this.vkApi.call('wall.post', {
+      owner_id: uploadData.owner_id,
+      message: videoName,
+      from_group: 1,
+      attachments: `video${uploadData.owner_id}_${uploadData.video_id}`
     });
 
+    return true;
   }
 }
 

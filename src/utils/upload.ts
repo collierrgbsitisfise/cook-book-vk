@@ -4,14 +4,7 @@ import * as fs from "fs";
 const DownloadByLink = async (inputArr: string[], pathToSave: string) => {
   inputArr.forEach(async (item, index) => {
     let fileLink = item;
-    let fileName = (item
-      .split("/")
-      .pop()
-      .replace(/\W/g, "")
-      .split("")
-      .filter((it: any) => isNaN(it))
-      .join("")
-      .toLowerCase()).slice(0,5) + '.mp4';
+    let fileName = item.split('/').pop();
     let file = fs.createWriteStream(`${pathToSave}/${fileName}`);
     let response: any = await (async () => {
       return new Promise((res, rej) => {

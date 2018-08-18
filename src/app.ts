@@ -4,6 +4,8 @@ import * as fsx from "fs-extra";
 import * as path from "path";
 import VkService from "./services/vk.service";
 import upload from "./utils/upload";
+import cookBookRcipets from "./utils/get-random-cook";
+import * as nodeCron from 'node-cron';
 
 const main = async () => {
 
@@ -13,34 +15,37 @@ const main = async () => {
     getAllFilesFromDir
   } = upload;
   
+  const {
+    getRandomCook
+  } = cookBookRcipets;
   //login VK
-  const vk = new VkService('+', '');
+  const vk = new VkService('+37360958742', 'pythonjavajavascript');
   await vk.autheticate();
+  try {
+    fsx.mkdirSync(path.join(__dirname, `../tmp_video`));
+  } catch(e) {}
 
-  //remove all folders[tmp__*]
-  fsx.removeSync(path.join(__dirname, `../tmp_video`));
-  fsx.removeSync(path.join(__dirname, `../tmp_gif`));
-  fsx.removeSync(path.join(__dirname, `../tmp_video_norm`));
-  
-  //create all folders[tmp__*]
-  fsx.mkdirSync(path.join(__dirname, `../tmp_video`));
-  fsx.mkdirSync(path.join(__dirname, `../tmp_gif`));
-  fsx.mkdirSync(path.join(__dirname, `../tmp_video_norm`));
-
-  //Get links for main cooks
+  const randomCook = await getRandomCook();
   
   //Download all videos(main cooks)
-  // DownloadByLink(
-  //   mainCooks.map(({ sourceVideo }) => sourceVideo),
-  //   path.join(__dirname, `../tmp_video/`)
-  // );
+  DownloadByLink(
+    [randomCook].map(({ sourceVideo }) => sourceVideo),
+    path.join(__dirname, `../tmp_video/`)
+  );
 
   //Get all videos from tmp_video
-  // let filesToConvert = await getAllFilesFromDir(
-  //   path.join(__dirname, `../tmp_video/`)
-  // );
+  let videoFiles = await getAllFilesFromDir(
+    path.join(__dirname, `../tmp_video/`)
+  );
   
-  // await vk.postVideoGropu('169958059', path.join(__dirname, `../tmp_vidseo/${filesToConvert[0]}`));
+  await vk.postVideoGropu('169958059', videoFiles[0], randomCook.cookName);
+  
+  setTimeout(() => {
+    fsx.removeSync(path.join(__dirname, `../tmp_video`));
+  }, 60000 * 10);
 };
 
-main();
+nodeCron.schedule(`*/${60 * 3} * * * *`, async function cronStart() {
+  console.log('cron works : ', new Date());
+  await main();
+});
