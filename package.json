@@ -21,7 +21,6 @@
     "@types/request": "^2.47.1",
     "@types/request-promise": "^4.1.42",
     "@types/shelljs": "^0.8.0",
-    "cheerio": "^1.0.0-rc.2",
     "form-data": "^2.3.2",
     "fs-extra": "^7.0.0",
     "gify": "^0.2.0",

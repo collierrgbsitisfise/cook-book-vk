@@ -3,8 +3,6 @@ import * as fs from "fs";
 import * as fsx from "fs-extra";
 import * as path from "path";
 import VkService from "./services/vk.service";
-import ParseGifPovarService from "./services/parse.gif-povar.service";
-import VideoToGif from "./services/videoToGif.service";
 import upload from "./utils/upload";
 
 const main = async () => {
@@ -16,7 +14,7 @@ const main = async () => {
   } = upload;
   
   //login VK
-  const vk = new VkService('', '');
+  const vk = new VkService('+', '');
   await vk.autheticate();
 
   //remove all folders[tmp__*]
@@ -30,23 +28,19 @@ const main = async () => {
   fsx.mkdirSync(path.join(__dirname, `../tmp_video_norm`));
 
   //Get links for main cooks
-  const gifParser = new ParseGifPovarService();
-  gifParser.setProxyServer("http://localhost:5555");
-  await gifParser.setPageHtml();
-  let mainCooks = gifParser.getMainCookOfDay();
   
   //Download all videos(main cooks)
-  DownloadByLink(
-    mainCooks.map(({ sourceVideo }) => sourceVideo),
-    path.join(__dirname, `../tmp_video/`)
-  );
+  // DownloadByLink(
+  //   mainCooks.map(({ sourceVideo }) => sourceVideo),
+  //   path.join(__dirname, `../tmp_video/`)
+  // );
 
   //Get all videos from tmp_video
-  let filesToConvert = await getAllFilesFromDir(
-    path.join(__dirname, `../tmp_video/`)
-  );
-
-  await vk.postVideoGropu('169958059', path.join(__dirname, `../tmp_vidseo/${filesToConvert[0]}`));
+  // let filesToConvert = await getAllFilesFromDir(
+  //   path.join(__dirname, `../tmp_video/`)
+  // );
+  
+  // await vk.postVideoGropu('169958059', path.join(__dirname, `../tmp_vidseo/${filesToConvert[0]}`));
 };
 
 main();
