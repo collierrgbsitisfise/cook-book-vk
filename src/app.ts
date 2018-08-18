@@ -19,7 +19,7 @@ const main = async () => {
     getRandomCook
   } = cookBookRcipets;
   //login VK
-  const vk = new VkService('+37360958742', 'pythonjavajavascript');
+  const vk = new VkService('', '');
   await vk.autheticate();
   try {
     fsx.mkdirSync(path.join(__dirname, `../tmp_video`));
