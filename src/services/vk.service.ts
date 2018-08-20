@@ -73,6 +73,7 @@ class VkService {
       console.log('video was added');
     } catch (err) {
       console.log('video already added');
+      return false;
     }
    
     await this.vkApi.call('wall.post', {

@@ -19,8 +19,8 @@ const main = async () => {
     getRandomCook
   } = cookBookRcipets;
   //login VK
-  const vk = new VkService('+37360958742', 'pythonjavajavascript');
-  await vk.autheticate();
+  const vk = new VkService('', '');
+  await vk.autheticate(); 
   try {
     fsx.mkdirSync(path.join(__dirname, `../tmp_video`));
   } catch(e) {}
@@ -38,14 +38,15 @@ const main = async () => {
     path.join(__dirname, `../tmp_video/`)
   );
   
-  await vk.postVideoGropu('169958059', videoFiles[0], randomCook.cookName);
+  let result = await vk.postVideoGropu('169958059', videoFiles[0], randomCook.cookName);
   
   setTimeout(() => {
     fsx.removeSync(path.join(__dirname, `../tmp_video`));
-  }, 60000 * 10);
+  }, 60000);
 };
 
-nodeCron.schedule(`*/${60 * 3} * * * *`, async function cronStart() {
-  console.log('cron works : ', new Date());
-  await main();
-});
+main();
+// nodeCron.schedule(`*/${60 * 2} * * * *`, async function cronStart() {
+//   console.log('cron works : ', new Date());
+//   await main();
+// });
