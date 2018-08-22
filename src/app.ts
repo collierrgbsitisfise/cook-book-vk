@@ -6,6 +6,7 @@ import VkService from "./services/vk.service";
 import upload from "./utils/upload";
 import cookBookRcipets from "./utils/get-random-cook";
 import * as nodeCron from 'node-cron';
+import dbMongoConnector from "./mongo.db.connector";
 
 const main = async () => {
 
@@ -21,28 +22,15 @@ const main = async () => {
   //login VK
   const vk = new VkService('', '');
   await vk.autheticate(); 
-  try {
-    fsx.mkdirSync(path.join(__dirname, `../tmp_video`));
-  } catch(e) {}
-
-  const randomCook = await getRandomCook();
   
-  //Download all videos(main cooks)
-  DownloadByLink(
-    [randomCook].map(({ sourceVideo }) => sourceVideo),
-    path.join(__dirname, `../tmp_video/`)
+  const db = new dbMongoConnector(
+    "ds247330.mlab.com",
+    "easy-links-db",
+    "admin",
+    "vadim1"
   );
-
-  //Get all videos from tmp_video
-  let videoFiles = await getAllFilesFromDir(
-    path.join(__dirname, `../tmp_video/`)
-  );
+  await db.connect();
   
-  let result = await vk.postVideoGropu('169958059', videoFiles[0], randomCook.cookName);
-  
-  setTimeout(() => {
-    fsx.removeSync(path.join(__dirname, `../tmp_video`));
-  }, 60000);
 };
 
 main();
