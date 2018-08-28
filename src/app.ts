@@ -8,6 +8,8 @@ import cookBookRcipets from "./utils/get-random-cook";
 import * as nodeCron from 'node-cron';
 import dbMongoConnector from "./mongo.db.connector";
 import povarenok from './models/povarenom';
+import YouTubeParse from './services/parse-youtube.service';
+import { SchemaType } from "mongoose";
 
 const main = async () => {
 
@@ -22,7 +24,7 @@ const main = async () => {
   } = cookBookRcipets;
   
   //login VK
-  const vk = new VkService('', '');
+  const vk = new VkService('+37360958742', 'pythonjavajavascript');
   await vk.autheticate(); 
   
   const db = new dbMongoConnector(
@@ -42,13 +44,13 @@ const main = async () => {
     return;
   }
   
-  const currentCook: any = allNotPostedCooks[0];
-  const embedYoutubeUrl: string = currentCook['sourceVideo'];
-  const YTVideoId = embedYoutubeUrl.split('/').pop().split('?')[0];
-  const originalYouTubeUrl = `https://www.youtube.com/watch?v=${YTVideoId}`;
-  console.log(originalYouTubeUrl);
-};
-
+  const cookNote: any = allNotPostedCooks[0];
+  const YouTube = new YouTubeParse(cookNote['sourceVideo']);
+  YouTube.setProxyServer("http://209.97.137.33:5555");
+  const directUrl = YouTube.fromtEmbedToDirectUrl();
+  await YouTube.setPageHtml(String(directUrl));
+  await db.closeConnection();
+}
 main();
 // nodeCron.schedule(`*/${60 * 2} * * * *`, async function cronStart() {
 //   console.log('cron works : ', new Date());
