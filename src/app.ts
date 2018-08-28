@@ -12,19 +12,9 @@ import YouTubeParse from './services/parse-youtube.service';
 import { SchemaType } from "mongoose";
 
 const main = async () => {
-
-  //utils
-  const {
-    DownloadByLink,
-    getAllFilesFromDir
-  } = upload;
-  
-  const {
-    getRandomCook
-  } = cookBookRcipets;
   
   //login VK
-  const vk = new VkService('+37360958742', 'pythonjavajavascript');
+  const vk = new VkService('', '');
   await vk.autheticate(); 
   
   const db = new dbMongoConnector(
@@ -33,8 +23,12 @@ const main = async () => {
     "admin",
     "vadim1"
   );
+   
+  //connect db
   await db.connect();
+ 
   // await povarenok.update({}, {posted: false}, {multi: true});
+  // get all pasred cooks not posted yet
   const allNotPostedCooks = await  povarenok.find({
     'posted': false
   }).exec();
@@ -43,12 +37,20 @@ const main = async () => {
     console.log('ERROR NO MORE DOCUMENTS');
     return;
   }
-  
+   
+  //get first one
   const cookNote: any = allNotPostedCooks[0];
+  
   const YouTube = new YouTubeParse(cookNote['sourceVideo']);
+  
   YouTube.setProxyServer("http://209.97.137.33:5555");
+  
   const directUrl = YouTube.fromtEmbedToDirectUrl();
+  
   await YouTube.setPageHtml(String(directUrl));
+  
+  const videoTitle = await YouTube.getVideoTitle();
+  
   await db.closeConnection();
 }
 main();

@@ -11,11 +11,11 @@ class YouTubeParse {
     }
   }
 
-  getUrl(): string {
+  public getUrl(): string {
     return this.ytUrl;
   }
 
-  setUrl(url: string): void {
+  public setUrl(url: string): void {
     this.ytUrl = url;
   }
 
@@ -41,7 +41,15 @@ class YouTubeParse {
   public getHtmlContent() {
     return this.htmlContent;
   }
-  fromtEmbedToDirectUrl(): string | number {
+  
+  public getVideoTitle():string {
+    const $ = cheerio.load(this.htmlContent);
+    const title = $("title").text();
+    const trimedFromYouTubeLabel = title.split(' - YouTube')[0];
+    return trimedFromYouTubeLabel;
+  }
+
+  public fromtEmbedToDirectUrl(): string | number {
     if (!this.ytUrl) {
       return -1;
     }
