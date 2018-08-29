@@ -44,9 +44,12 @@ class dbMongoConnector {
     }
 
     public async closeConnection() {
-        setTimeout(() => {
-            mongoose.disconnect();            
-        }, 5000);
+        return new Promise(res => {
+            setTimeout(async () => {
+                await mongoose.disconnect();
+                res(true);           
+            }, 5000);
+        })
     }
 }
 

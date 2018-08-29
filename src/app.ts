@@ -14,7 +14,7 @@ import { SchemaType } from "mongoose";
 const main = async () => {
   
   //login VK
-  const vk = new VkService('+37360958742', 'pythonjavajavascript');
+  const vk = new VkService('', '');
   await vk.autheticate(); 
   
   const db = new dbMongoConnector(
@@ -54,9 +54,20 @@ const main = async () => {
   await vk.postVideoFromYouTube('169958059', videoTitle, String(directUrl));
 
   await db.closeConnection();
+
+  await povarenok.updateOne({_id: cookNote['_id']}, {posted: true}, {upsert: true});
+  
+  try {
+    await db.closeConnection();
+  } catch (err) {
+    console.log('some error');
+    console.log(err);
+  }
+  
+  console.log('thats all');
 }
-main();
-// nodeCron.schedule(`*/${60 * 2} * * * *`, async function cronStart() {
-//   console.log('cron works : ', new Date());
-//   await main();
-// });
+
+nodeCron.schedule(`*/${60 * 3} * * * *`, async function cronStart() {
+  console.log('cron works : ', new Date());
+  await main();
+});
