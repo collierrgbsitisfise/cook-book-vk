@@ -34,6 +34,30 @@ class VkService {
   public getvkApi(): any {
     return this.vkApi;
   }
+  
+  public async postVideoFromYouTube(groupId: string, videoName: string, YTlink: string): Promise<any> {
+    console.log('gID: ', groupId);
+    console.log('vName: ', videoName);
+    let saveData = await this.vkApi.call("video.save", {
+      name: videoName,
+      group_id: groupId,
+      wallpost: 1,
+      link: YTlink
+    });
+  
+    await rp.post({
+      url: saveData.upload_url
+    });
+    
+    // await this.vkApi.call('wall.post', {
+    //   owner_id: `-${groupId}`,
+    //   message: videoName,
+    //   from_group: 1,
+    //   attachments: `video-${groupId}_${saveData.video_id}`
+    // });
+
+    console.log('was posted');
+  }
 
   public async postVideoGropu(
     groupId: string,

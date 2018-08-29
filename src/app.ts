@@ -14,7 +14,7 @@ import { SchemaType } from "mongoose";
 const main = async () => {
   
   //login VK
-  const vk = new VkService('', '');
+  const vk = new VkService('+37360958742', 'pythonjavajavascript');
   await vk.autheticate(); 
   
   const db = new dbMongoConnector(
@@ -51,6 +51,8 @@ const main = async () => {
   
   const videoTitle = await YouTube.getVideoTitle();
   
+  await vk.postVideoFromYouTube('169958059', videoTitle, String(directUrl));
+
   await db.closeConnection();
 }
 main();

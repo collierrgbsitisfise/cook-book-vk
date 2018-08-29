@@ -23,11 +23,13 @@ class dbMongoConnector {
     
     public async connect(): Promise<any> {
         const dbUrl = this.formatConnectionUrl();
-
+        const options = {
+            useNewUrlParser: true,
+        };
         const connectPromise = function (resolve: any, reject: any): any {
             mongoose.connect(
                 dbUrl,
-                { useNewUrlParser: true },
+                options,
                 (err: any) => {
                     if (err) {
                       reject(err);
